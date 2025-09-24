@@ -1,0 +1,34 @@
+services:
+  backend:
+    build: ./backend
+    container_name: civili-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      # Éviter d'écraser node_modules avec le volume
+      - ./backend:/app
+      - /app/node_modules
+      - ./data:/app/data
+    environment:
+      - NODE_ENV=production
+      - SECRET_KEY=${SECRET_KEY:-polm1234}
+    networks:
+      - civili-network
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: civili-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+    networks:
+      - civili-network
+    restart: unless-stopped
+
+networks:
+  civili-network:
+    driver: bridge
