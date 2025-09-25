@@ -1,0 +1,182 @@
+:root {
+    --back-color: #363434;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: var(--back-color);
+}
+
+.btn-conteneur {
+    display: flex;
+}
+
+select {
+    width: auto; /* ← Trop petit pour le texte */
+    min-width: 200px; /* ← Ajoutez ça */
+    margin-right: 10px;
+    color: white;
+    border-color: rgb(49, 47, 47);
+    border-radius: 10px;
+    border-width: 3px;
+    background-color: var(--back-color);
+}
+
+.btn-conteneur input{
+    background-color: var(--back-color);
+    margin-right: 10px;
+    color: white;
+}
+
+.notes-conteneur {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+button {
+    background-color: #4562a0;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 20px;
+    margin-right: 10px;
+    transition: background-color 0.3s;
+}
+
+
+button {
+    background-color: #4c95af;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    outline: none;
+}
+
+/* Style pour les carrés de notes */
+.note-square {
+    transition: transform 0.2s, box-shadow 0.2s;
+    
+    width: 150px;
+    height: 150px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    border-radius: 8px;
+
+    cursor: grab;
+}
+
+.note-square.dragging {
+    opacity: 0.8;
+    z-index: 1000;
+    cursor: grabbing;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+}
+
+/* Classe pour indiquer qu'on est en mode resize */
+.note-square.resizing {
+    cursor: se-resize !important;
+}
+
+/* Ou encore mieux, utilisez un pseudo-élément pour la zone de resize */
+.note-square::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    cursor: se-resize;
+    pointer-events: auto;
+}
+
+
+.note-square:hover {
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.3);
+}
+
+.note-square:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+}
+
+.note-text-area {
+    width: 90%;
+    height: 90%;
+    margin: auto;
+    outline: none;
+    color: white;
+    font-size: 14px;
+
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: text;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+/* Style pour le texte éditable dans les carrés */
+[contenteditable="true"] {
+    border: none !important;
+    background: transparent !important;
+}
+
+[contenteditable="true"]:focus {
+    outline: 2px solid rgba(255,255,255,0.3) !important;
+    border-radius: 4px;
+}
+
+.color-picker {
+    background-color: var(--back-color);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    
+    border: none;
+    outline: none;
+    background: none;
+    padding: 0;
+
+    width: 40px;
+    height: 40px;
+
+    min-width: 40px;
+    min-height: 40px;
+    
+    cursor: pointer;
+}
+
+/* Menu click droit sur une note */
+.context-menu {
+    position: absolute;
+    background: #2c2c2c;
+    border: 1px solid #555;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    z-index: 2000;
+    padding: 15px 0;
+    min-width: 120px;
+    display: none;
+}
+
+.context-menu-item {
+    padding: 8px 15px;
+    cursor: pointer;
+    color: white;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.context-menu-item:hover {
+    background-color: #4562a0;
+}
