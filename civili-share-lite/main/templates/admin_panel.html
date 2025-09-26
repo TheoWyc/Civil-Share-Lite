@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Panneau Admin</title>
+    <style>
+        body {
+            background-color: #363434;
+            font-family: Arial, sans-serif;
+            /* max-width: 800px;
+            display: flex;
+            justify-content: center;
+            margin: 50px auto; */
+            padding: 20px;
+            margin: 0;
+            padding: 20px; /* Un peu d'espace autour */
+        }
+        .blanc{
+            /* background-color: white;
+            border-radius: 15px;
+            padding: 10px;
+            width: 60vw; */
+            /* background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); Dégradé subtil */
+            /* border: 1px solid #dee2e6; Bordure fine */
+            background-color: white; 
+            border-radius: 15px; /* Coins arrondis sympas */
+            padding: 30px; /* Espace intérieur généreux */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Ombre douce */
+            max-width: 900px; /* Largeur max pour pas que ça s'étale */
+            margin: 0 auto; /* Centrer horizontalement */
+            min-height: calc(100vh - 40px); /* Hauteur min moins le padding du body */
+            box-sizing: border-box;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .inactive {
+            opacity: 0.6;
+            background-color: #f8f9fa;
+        }
+        .admin-badge {
+            background-color: #28a745;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        .user-badge {
+            background-color: #6c757d;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        .btn {
+            padding: 5px 10px;
+            margin: 2px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 12px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-delete {
+            background-color: #f33447;
+            color: black;
+        }
+        .btn-reset {
+            background-color: #ffc107;
+            color: black;
+        }
+        .btn-admin {
+            background-color: #17a2b8;
+            color: white;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        h1 {
+            color: #dc3545;
+        }
+        
+        /* Styles pour la popup */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 300px;
+            text-align: center;
+        }
+        .modal input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+        .modal-buttons {
+            margin-top: 15px;
+        }
+        .btn-confirm {
+            background-color: #28a745;
+            color: white;
+            margin-right: 10px;
+        }
+        .btn-cancel {
+            background-color: #6c757d;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="blanc">
+        
+        <a href="/" class="back-link">← Retour au login</a>
+        
+        <h1>🔧 Panneau d'Administration</h1>
+        
+        <div style="margin: 20px 0;">
+            <button class="btn" style="background-color: #28a745; color: white; padding: 10px 20px;" onclick="showAddUserModal()">
+                ➕ Ajouter un utilisateur
+            </button>
+        </div>
+
+        <table >
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nom d'utilisateur</th>
+                    <th>Statut</th>
+                    <th>Mot de passe</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr class="{% if not user[2] %}inactive{% endif %}">
+                    <td>{{ user[0] }}</td>
+                    <td>{{ user[1] }}</td>
+                    <td>
+                        {% if user[3] %}
+                            <span class="admin-badge">ADMIN</span>
+                        {% else %}
+                            <span class="user-badge">USER</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if user[2] %}
+                            ✅ Configuré
+                        {% else %}
+                            ❌ Non configuré
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button class="btn btn-delete" onclick="showModal('delete', '{{ user[1]}}')">
+                            🗑️
+                        </button>
+                        {% if user[2] %}
+                            <button class="btn btn-reset" onclick="showModal('reset', '{{ user[1] }}')">
+                                🔄 Reset Password
+                            </button>
+                        {% endif %}
+                        {% if not user[3] %}
+                            <button class="btn btn-admin" onclick="showModal('admin', '{{ user[1] }}')">
+                                ⬆️ Promouvoir Admin
+                            </button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Modal de confirmation -->
+        <div id="confirmModal" class="modal">
+            <div class="modal-content">
+                <h3 id="modalTitle">Confirmer l'action</h3>
+                <p id="modalMessage">Veuillez entrer votre mot de passe pour confirmer :</p>
+                <form id="confirmForm" method="post">
+                    <input type="hidden" id="targetUser" name="target_user">
+                    <input type="hidden" id="actionType" name="action_type">
+                    <input type="text" id="adminUsername" name="admin_username" placeholder="Votre nom d'utilisateur" required style="display:none;">
+                    <input type="password" id="adminPassword" name="admin_password" placeholder="Votre mot de passe" required>
+                    <div class="modal-buttons">
+                        <button type="submit" class="btn btn-confirm">Confirmer</button>
+                        <button type="button" class="btn btn-cancel" onclick="closeModal()">Annuler</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal d'ajout d'utilisateur -->
+        <div id="addUserModal" class="modal">
+            <div class="modal-content">
+                <h3>Ajouter un nouvel utilisateur</h3>
+                <form method="post" action="/admin-add-user">
+                    <input type="text" name="new_username" placeholder="Nom d'utilisateur" required>
+                    <div class="modal-buttons">
+                        <button type="submit" class="btn btn-confirm">Ajouter</button>
+                        <button type="button" class="btn btn-cancel" onclick="closeAddUserModal()">Annuler</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showModal(action, username) {
+            const modal = document.getElementById('confirmModal');
+            const title = document.getElementById('modalTitle');
+            const message = document.getElementById('modalMessage');
+            const form = document.getElementById('confirmForm');
+            const targetUser = document.getElementById('targetUser');
+            const actionType = document.getElementById('actionType');
+            const adminUsername = document.getElementById('adminUsername');
+            
+            targetUser.value = username;
+            actionType.value = action;
+            
+            // Afficher le champ username admin
+            adminUsername.style.display = 'block';
+            
+            if (action === 'reset') {
+                title.textContent = 'Reset Password';
+                message.textContent = `Confirmer le reset du mot de passe pour "${username}" :`;
+                form.action = '/admin-reset-password';
+            } else if (action === 'admin') {
+                title.textContent = 'Promouvoir Admin';
+                message.textContent = `Confirmer la promotion de "${username}" en admin :`;
+                form.action = '/admin-promote-user';
+            } else if (action === 'delete') {
+                title.textContent = 'Delete User';
+                message.textContent = `Confirmer la suppression de "${username}" :`;
+                form.action = '/admin-delete-user';
+            }
+            
+            modal.style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('confirmModal').style.display = 'none';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminUsername').value = '';
+            document.getElementById('adminUsername').style.display = 'none';
+        }
+        
+        function showAddUserModal() {
+            document.getElementById('addUserModal').style.display = 'block';
+        }
+        
+        function closeAddUserModal() {
+            document.getElementById('addUserModal').style.display = 'none';
+        }
+        
+        // Fermer les modals si on clique à l'extérieur
+        window.onclick = function(event) {
+            const confirmModal = document.getElementById('confirmModal');
+            const addUserModal = document.getElementById('addUserModal');
+            if (event.target === confirmModal) {
+                closeModal();
+            }
+            if (event.target === addUserModal) {
+                closeAddUserModal();
+            }
+        }
+    </script>
+</body>
+</html>

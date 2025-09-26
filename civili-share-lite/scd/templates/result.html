@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Résultat</title>
+    <style>
+        body {
+            background-color: #363434;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .blanc{
+            background-color: white; 
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 24px;
+        }
+        .success {
+            color: #28a745;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+        }
+        .error {
+            color: #dc3545;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 8px;
+        }
+        .button-group {
+            margin-top: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        a {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        a:hover {
+            background-color: #0056b3;
+        }
+        .admin-btn {
+            background-color: #dc3545 !important;
+        }
+        .admin-btn:hover {
+            background-color: #c82333 !important;
+        }
+        .success-btn {
+            background-color: #28a745 !important;
+        }
+        .success-btn:hover {
+            background-color: #218838 !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="blanc">
+        <h2>Résultat</h2>
+        <p class="{% if success %}success{% else %}error{% endif %}">
+            {{ message }}
+        </p>
+        
+        <div class="button-group">
+            {% if success and is_admin %}
+            <a href="/admin_panel" class="admin-btn">🔧 Panneau Admin</a>
+            {% endif %}
+            
+            <a href="/">Retour au login</a>
+            
+            {% if success %}
+            <a href="/notes" class="success-btn">Accéder aux notes</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

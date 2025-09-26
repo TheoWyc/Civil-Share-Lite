@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Notes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', path='/style.css') }}">
+</head>
+<body>
+    <div class="btn-conteneur">
+        <button id="boutonAjouterNote">Ajouter une note</button>
+        <input type="color" id="colorPicker" class="color-picker" value="#4562a0">
+        <button id="boutonSauvegarde">Sauvegarder</button>
+        <button id="boutonRecharge">Recharger</button>
+        <select id="menuSaves">
+            <option value="" disabled selected>Sélectionner une option</option>
+        </select>
+        <input id="nomNewSave" placeholder="Nom de la sauvegarde">
+        <button id="boutonAjouterSave">Nouvelle sauvegarde</button>
+        <button id="boutonSupprimerSave">Supprimer sauvegarde</button>
+        <a href="/">
+            <button>Déconnexion</button>
+        </a>
+    </div>
+
+    <div class="notes-conteneur"></div>
+
+    <div id="contextMenu" class="context-menu">
+        <div class="context-menu-item" data-action="duplicate">Dupliquer</div>
+        <div class="context-menu-item" data-action="changeColor">Changer couleur</div>
+        <div class="context-menu-item" data-action="delete">Supprimer</div>
+        <div class="context-menu-item" data-action="addFile">Ajouter un fichier</div>
+    </div>
+
+    <script src="{{ url_for('static', path='/script.js') }}"></script>
+</body>
+</html>

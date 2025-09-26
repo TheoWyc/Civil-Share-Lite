@@ -1,0 +1,29 @@
+services:
+  main:
+    build: ./main
+    container_name: civili-main
+    ports:
+      - "8000:8000"
+    volumes:
+      # Éviter d'écraser node_modules avec le volume
+      - ./main:/app
+    networks:
+      - civili-network
+    restart: unless-stopped
+
+  scd:
+    build: ./scd
+    container_name: civili-scd
+    ports:
+      - "9000:8000"
+    volumes:
+      - ./scd:/app
+    depends_on:
+      - main
+    networks:
+      - civili-network
+    restart: unless-stopped
+
+networks:
+  civili-network:
+    driver: bridge
